@@ -1,11 +1,14 @@
 package com.ipiecoles.java.mdd050.controller;
 
+import com.ipiecoles.java.mdd050.exception.ConflictException;
 import com.ipiecoles.java.mdd050.model.Employe;
 import com.ipiecoles.java.mdd050.service.EmployeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/employes") /*=> si on fait ça, dans le RequestMapping suivant on ne met pas "/employes", ce n'est
@@ -24,7 +27,7 @@ public class EmployeController {
     @RequestMapping(value = "/{id}") //là, l'url sera: "http://localhost:5367/employes/6" avec 6 l'id, par exemple
     /* , method = RequestMethod.GET, produces = "application/json" peut être rajouté dans la parenthèse après
      * "/{id}" mais ce n'est pas indispensable */
-    public Employe infosEmploye(@PathVariable(value = "id") Long id)
+    public Employe infosEmploye(@PathVariable(value = "id") Long id) throws EntityNotFoundException
     {
         return employeService.informationsEmploye(id);
     }
@@ -45,7 +48,7 @@ public class EmployeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json", value = "")
-    public Employe createEmploye (@RequestBody Employe employe){
+    public Employe createEmploye (@RequestBody Employe employe) throws ConflictException {
         return employeService.creerEmploye(employe);
     }
 
